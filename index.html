@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>철수세미 동아리 웹 매거진 Vol.1 - 달걀과 스마트폰은 왜 깨지지 않을까?</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --accent: #0ea5e9;
+            --bg-outer: #e2e8f0;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-body: #334155;
+            --text-sub: #64748b;
+            --border: #cbd5e1;
+            --border-light: #e2e8f0;
+            --safe-bg: #dcfce7;
+            --safe-text: #166534;
+            --safe-border: #86efac;
+            --warn-bg: #fef9c3;
+            --warn-text: #854d0e;
+            --warn-border: #fde047;
+            --danger-bg: #fee2e2;
+            --danger-text: #991b1b;
+            --danger-border: #fca5a5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #cbd5e1 0%, #e2e8f0 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .magazine-frame {
+            width: 100%;
+            max-width: 1240px;
+            min-height: 690px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 28px;
+            height: 62px;
+            flex-shrink: 0;
+        }
+
+        .brand-logo {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .brand-logo span {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            padding: 19px 14px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-sub);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            color: var(--primary);
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .page-viewport {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #ffffff;
+            padding: 32px 40px;
+            justify-content: center;
+        }
+
+        .page-section {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            animation: fadeIn 0.22s ease;
+        }
+
+        .page-section.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .landscape-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: stretch;
+            height: 100%;
+        }
+
+        .col-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .chapter-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            width: fit-content;
+        }
+
+        h1.page-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
+            margin-bottom: 12px;
+            letter-spacing: -0.6px;
+        }
+
+        p.lead-text {
+            font-size: 15px;
+            color: var(--text-body);
+            line-height: 1.65;
+            margin-bottom: 14px;
+        }
+
+        .cover-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 36px;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            padding: 42px;
+            height: 100%;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin-bottom: 18px;
+        }
+
+        .cover-main-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.28;
+            letter-spacing: -0.8px;
+            margin-bottom: 16px;
+        }
+
+        .cover-sub {
+            font-size: 17px;
+            color: var(--text-body);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .author-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #bfdbfe;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.06);
+        }
+
+        .cover-toc-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+        }
+
+        .cover-toc-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .toc-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toc-item a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 6px 8px;
+            border-radius: 8px;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .toc-item a:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .toc-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .info-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .info-card p {
+            font-size: 14.5px;
+            color: var(--text-body);
+            line-height: 1.6;
+        }
+
+        .summary-callout {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .summary-callout-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0369a1;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-callout p, .summary-callout li {
+            font-size: 14px;
+            color: #1e3a8a;
+            line-height: 1.6;
+        }
+
+        .formula-pill {
+            display: inline-block;
+            background: #ffffff;
+            border: 1px solid #93c5fd;
+            color: var(--primary-dark);
+            font-weight: 800;
+            font-size: 15px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            margin: 6px 0;
+        }
+
+        .arch-diagram-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .arch-points {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
+            text-align: left;
+        }
+
+        .arch-point-item {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            padding: 11px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: var(--text-body);
+        }
+
+        .arch-point-item strong {
+            color: var(--primary-dark);
+        }
+
+        /* 4장 시뮬레이터 스타일 */
+        .sim-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 24px;
+            height: 100%;
+            align-items: stretch;
+        }
+        .sim-left-panel, .sim-right-panel {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .sim-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .control-box label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+        .control-box select {
+            width: 100%;
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            background: #ffffff;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+        .sim-start-btn {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+        }
+        .sim-start-btn:hover { background: var(--primary-dark); }
+        .stage-canvas-wrap {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 8px;
+        }
+        canvas { display: block; width: 100%; border-radius: 6px; }
+        .graph-header { display: flex; justify-content: space-between; align-items: center; }
+        .graph-title { font-size: 14.5px; font-weight: 800; color: var(--text-main); }
+        .graph-sub { font-size: 12px; color: var(--text-sub); font-weight: 600; }
+        .result-placeholder {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; background: #ffffff; border: 1px dashed var(--border);
+            border-radius: 10px; padding: 24px; color: var(--text-sub); font-size: 14px; line-height: 1.6;
+        }
+        .result-active-area { display: none; flex-direction: column; gap: 12px; flex: 1; justify-content: space-between; }
+        .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .metric-chip { background: #ffffff; border: 1px solid var(--border-light); border-radius: 8px; padding: 10px; text-align: center; }
+        .metric-label { font-size: 11.5px; color: var(--text-sub); font-weight: 600; margin-bottom: 3px; }
+        .metric-val { font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .status-banner { padding: 13px 16px; border-radius: 10px; border: 1px solid transparent; font-size: 14px; line-height: 1.5; }
+        .status-safe { background: var(--safe-bg); color: var(--safe-text); border-color: var(--safe-border); }
+        .status-warn { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+        .status-danger { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-border); }
+
+        .bottom-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 32px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border-light);
+            flex-shrink: 0;
+        }
+
+        .footer-btn {
+            padding: 8px 18px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .footer-btn:hover {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .footer-btn.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .page-status-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-sub);
+        }
+
+        @media (max-width: 920px) {
+            .magazine-frame { min-height: auto; }
+            .landscape-grid, .cover-grid, .sim-layout { grid-template-columns: 1fr; }
+            .page-viewport { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="magazine-frame">
+    <!-- 상단 내비게이션 -->
+    <header class="top-header">
+        <a href="#page0" class="brand-logo" onclick="goPage(0); return false;">
+            <span>VOL.1</span> 철수세미 동아리 WEB-MAGAZINE
+        </a>
+        <nav class="nav-tabs" id="nav-tabs">
+            <a href="#page0" class="nav-btn active" data-page="0" onclick="goPage(0); return false;">📖 표지</a>
+            <a href="#page1" class="nav-btn" data-page="1" onclick="goPage(1); return false;">1. 운동량의 탄생</a>
+            <a href="#page2" class="nav-btn" data-page="2" onclick="goPage(2); return false;">2. 운동량과 충격량</a>
+            <a href="#page3" class="nav-btn" data-page="3" onclick="goPage(3); return false;">3. 아치 구조의 비밀</a>
+            <a href="#page4" class="nav-btn" data-page="4" onclick="goPage(4); return false;">4. 충격량 시뮬레이터</a>
+            <a href="#page5" class="nav-btn" data-page="5" onclick="goPage(5); return false;">5. 안전 기술과 성찰</a>
+        </nav>
+    </header>
+
+    <!-- 본문 뷰포트 -->
+    <main class="page-viewport">
+        <!-- 0. 표지 -->
+        <section id="page0" class="page-section active">
+            <div class="cover-grid">
+                <div>
+                    <span class="cover-badge">통합과학 탐구 매거진 · 역학적 시스템과 안전</span>
+                    <h1 class="cover-main-title">달걀과 스마트폰은<br>왜 깨지지 않을까?</h1>
+                    <p class="cover-sub">
+                        일상 속 완충 구조에 숨겨진 역학적 시스템의 비밀과<br>
+                        운동량·충격량, 그리고 아치(Arch) 구조의 과학적 원리 탐구
+                    </p>
+                    <div class="author-chip">
+                        ✍️ 작성자: 천안중앙고등학교 1학년 김현준
+                    </div>
+                </div>
+                <div class="cover-toc-card">
+                    <div class="cover-toc-title">CONTENTS · 목차 바로가기</div>
+                    <ul class="toc-list">
+                        <li class="toc-item"><a href="#page1" onclick="goPage(1); return false;"><span class="toc-num">1</span> 일상 속 호기심과 운동의 정량화</a></li>
+                        <li class="toc-item"><a href="#page2" onclick="goPage(2); return false;"><span class="toc-num">2</span> 운동량과 충격량의 관계 (I = Δp)</a></li>
+                        <li class="toc-item"><a href="#page3" onclick="goPage(3); return false;"><span class="toc-num">3</span> 실험 설계와 아치(Arch) 구조의 힘 분산</a></li>
+                        <li class="toc-item"><a href="#page4" onclick="goPage(4); return false;"><span class="toc-num">4</span> 인터랙티브 낙하 충격량 시뮬레이터</a></li>
+                        <li class="toc-item"><a href="#page5" onclick="goPage(5); return false;"><span class="toc-num">5</span> 현대 안전 기술 적용과 탐구 성찰</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1. 운동량의 탄생 -->
+        <section id="page1" class="page-section">
+            <div class="landscape-grid">
+                <div class="col-panel">
+                    <div>
+                        <span class="chapter-tag">CHAPTER 01 · 탐구 동기와 운동량 개념</span>
+                        <h1 class="page-title">일상 속 호기심과 운동의 정량화</h1>
+                        <p class="lead-text">
+                            택배 상자 속 에어캡을 누르거나 둥글게 파인 달걀판을 볼 때마다 "얇은 구조물이 어떻게 외부 충격을 막아낼까?" 하는 궁금증이 생겼어요. 막연한 느낌을 넘어 역학 공식으로 원리를 확인해 보고자 탐구를 시작했어요.
+                        </p>
+                    </div>
+                    <div class="summary-callout">
+                        <div class="summary-callout-title">💡 한눈에 보는 핵심 요약</div>
+                        <p>
+                            움직이는 물체의 운동 세기는 <strong>질량(m)</strong>과 <strong>속도(v)</strong>를 함께 곱한 <strong>운동량(p = mv)</strong>으로 나타내요. 질량이 큰 트럭이나 속도가 빠른 야구공 모두 큰 운동량을 가지기 때문에 멈추기 어렵답니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-panel">
+                    <div class="info-card">
+                        <h3>Q1. 운동하는 물체의 상태를 어떻게 수치로 나타낼 수 있나요?</h3>
+                        <p>
+                            물체가 움직일 때 나아가려는 운동의 세기와 방향을 동시에 보여주는 물리량이 바로 <strong>운동량</strong>이에요. 같은 속도라도 자전거보다 대형 트럭을 멈추는 게 훨씬 어렵고, 같은 무게라도 천천히 던진 공보다 시속 150km로 날아오는 강속구가 훨씬 큰 충격을 주는 것과 같은 이치예요.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Q2. 운동량이라는 개념은 어떻게 만들어졌나요?</h3>
+                        <p>
+                            17세기 과학자 <strong>데카르트</strong>가 물체의 운동 상태를 '질량과 속도의 곱'으로 처음 제안했고, 이후 <strong>아이작 뉴턴</strong>이 운동 법칙을 체계화하면서 오늘날 우리가 사용하는 현대적인 운동량 공식(<span class="formula-pill">p = m × v</span>)으로 완성되었어요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 운동량과 충격량 -->
+        <section id="page2" class="page-section">
+            <div class="landscape-grid">
+                <div class="col-panel">
+                    <div>
+                        <span class="chapter-tag">CHAPTER 02 · 충격량과 시간의 마법</span>
+                        <h1 class="page-title">충격량은 왜 운동량의 변화량일까요?</h1>
+                        <p class="lead-text">
+                            달리는 물체를 멈추거나 방향을 바꾸려면 외부에서 힘을 주어야 해요. 이때 물체가 받은 충격의 총량을 <strong>충격량(I)</strong>이라고 부르며, 힘과 시간이 핵심 역할을 해요.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <h3>Q3. 충격량 공식은 어떻게 유도되나요?</h3>
+                        <p>
+                            충격량(I)은 가해진 <strong>힘(F)</strong>과 힘이 작용한 <strong>시간(Δt)</strong>의 곱이에요. 여기에 뉴턴의 운동 제2법칙(F = ma)을 연결하면, 결국 <strong>물체가 받은 충격량은 물체의 운동량 변화량(Δp)과 정확히 같다</strong>는 결론이 나와요.
+                        </p>
+                        <div class="formula-pill">I = F × Δt = Δp = mv₂ - mv₁</div>
+                    </div>
+                </div>
+                <div class="col-panel">
+                    <div class="summary-callout" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="summary-callout-title">📊 그래프 넓이와 완충 원리 이해하기</div>
+                        <ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
+                            <li>
+                                <strong>총 충격량(그래프 아래 넓이)은 일정해요:</strong> 같은 높이에서 떨어진 달걀이 바닥에 닿아 멈출 때까지 변하는 운동량(총 충격량)은 바닥이 맨땅이든 스펀지든 똑같아요.
+                            </li>
+                            <li>
+                                <strong>충돌 시간(Δt)을 늘리면 힘이 줄어들어요:</strong> 스펀지나 에어캡처럼 푹신한 완충재는 물체가 멈추는 시간을 길게 끌어줘요. 같은 넓이를 가로로 길게 늘리면 세로 높이가 낮아지듯, <strong>물체가 받는 순간 최대 충격력(F)이 크게 줄어들어</strong> 깨지지 않게 돼요.
+                            </li>
+                            <li>
+                                <strong>단단한 바닥이 위험한 이유:</strong> 맨땅에 떨어지면 충돌 시간(Δt)이 찰나처럼 짧아지면서 모든 충격이 한순간에 집중되어 최대 힘이 파손 한계를 넘어서게 돼요.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 아치 구조의 비밀 -->
+        <section id="page3" class="page-section">
+            <div class="landscape-grid">
+                <div class="col-panel">
+                    <div>
+                        <span class="chapter-tag">CHAPTER 03 · 변인 통제와 구조 공학</span>
+                        <h1 class="page-title">실험 설계와 아치(Arch) 구조의 비밀</h1>
+                        <p class="lead-text">
+                            완충 조건에 따른 충격 감소 효과를 객관적으로 비교하기 위해 과학적 변인 통제를 적용해 탐구를 설계했어요.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🔬 과학적 실험 설계 (변인 통제)</h3>
+                        <p>
+                            • <strong>통제 변인(일정하게 유지):</strong> 교실 바닥 재질, 낙하 높이, 실험 대상 물체의 질량<br>
+                            • <strong>조작 변인(다르게 변화):</strong> 완충재의 종류(에어캡, 스펀지, 맨땅) 및 아치형 구조 적용 여부
+                        </p>
+                    </div>
+                    <div class="summary-callout">
+                        <div class="summary-callout-title">🥚 달걀 껍데기와 로마 수도교의 공통점</div>
+                        <p>
+                            달걀은 얇은 껍데기로 이루어져 있지만 위아래 양끝을 손으로 쥐고 누르면 쉽게 깨지지 않아요. 둥근 돔 형태의 아치 구조가 누르는 힘을 사방으로 고르게 퍼뜨리기 때문이에요.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-panel">
+                    <div class="arch-diagram-box" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 14px; font-weight: 800; color: var(--primary-dark); margin-bottom: 8px;">
+                                🏛️ 아치(Arch) 구조가 하중을 버티는 힘의 분산 원리
+                            </div>
+                            <svg viewBox="0 0 360 115" style="width: 100%; max-height: 115px; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                <line x1="180" y1="8" x2="180" y2="34" stroke="#ef4444" stroke-width="3"/>
+                                <polygon points="180,40 174,30 186,30" fill="#ef4444"/>
+                                <text x="192" y="24" font-size="11" font-weight="bold" fill="#dc2626">수직 하중 (외부 충격)</text>
+                                <path d="M 60 100 A 120 55 0 0 1 300 100" fill="none" stroke="#2563eb" stroke-width="10" stroke-linecap="round"/>
+                                <line x1="125" y1="53" x2="82" y2="78" stroke="#0ea5e9" stroke-width="2.5"/>
+                                <polygon points="76,82 82,72 88,80" fill="#0ea5e9"/>
+                                <line x1="235" y1="53" x2="278" y2="78" stroke="#0ea5e9" stroke-width="2.5"/>
+                                <polygon points="284,82 272,80 278,72" fill="#0ea5e9"/>
+                                <text x="20" y="65" font-size="10.5" font-weight="bold" fill="#0369a1">옆으로 힘 분산</text>
+                                <text x="265" y="65" font-size="10.5" font-weight="bold" fill="#0369a1">옆으로 힘 분산</text>
+                            </svg>
+                        </div>
+                        <div class="arch-points">
+                            <div class="arch-point-item">
+                                <strong>1. 수직 힘을 수평 방향으로 분산:</strong> 위에서 내리누르는 무거운 힘을 둥근 곡선을 따라 양옆으로 흩어지게 만들어 한곳에 충격이 몰리는 것을 막아줘요.
+                            </div>
+                            <div class="arch-point-item">
+                                <strong>2. 압축력으로 버티는 튼튼한 구조:</strong> 각진 모서리가 없어 꺾이거나 부러질 약점이 적고, 조각들이 서로 밀어내는 '압축력'으로 하중을 단단히 지탱해요.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 충격량 시뮬레이터 (커스텀 벡터 일러스트 포함) -->
+        <section id="page4" class="page-section">
+            <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <span class="chapter-tag" style="margin-bottom: 4px;">CHAPTER 04 · 가상 물리 실험실</span>
+                    <h1 class="page-title" style="margin-bottom: 0; font-size: 22px;">낙하 충격량 및 파손 여부 시뮬레이터</h1>
+                </div>
+                <span style="font-size: 13px; color: var(--text-sub); font-weight: 600;">
+                    물체와 완충재를 고른 뒤 [시뮬레이션 시작]을 눌러보세요!
+                </span>
+            </div>
+            <div class="sim-layout">
+                <div class="sim-left-panel">
+                    <div class="sim-controls">
+                        <div class="control-box">
+                            <label for="sim-object">실험 대상 물체</label>
+                            <select id="sim-object" onchange="resetSimView()">
+                                <option value="egg">🥚 날달걀 (60g)</option>
+                                <option value="phone">📱 스마트폰 (200g)</option>
+                                <option value="glass">🥛 유리컵 (350g)</option>
+                                <option value="watermelon">🍉 수박 (3.0kg)</option>
+                            </select>
+                        </div>
+                        <div class="control-box">
+                            <label for="sim-height">낙하 높이 (m)</label>
+                            <select id="sim-height" onchange="resetSimView()">
+                                <option value="0.5">0.5 m (책상 높이)</option>
+                                <option value="1.2" selected>1.2 m (가슴 높이)</option>
+                                <option value="2.5">2.5 m (천장 근처)</option>
+                                <option value="4.0">4.0 m (2층 높이)</option>
+                            </select>
+                        </div>
+                        <div class="control-box">
+                            <label for="sim-buffer">바닥 완충재</label>
+                            <select id="sim-buffer" onchange="resetSimView()">
+                                <option value="bubble">🫧 에어캡 (충돌 0.055s)</option>
+                                <option value="sponge" selected>🧽 스펀지 (충돌 0.025s)</option>
+                                <option value="concrete">🧱 맨땅 (충돌 0.004s)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="sim-start-btn" id="start-btn" onclick="startSimulation()">
+                        ▶ 시뮬레이션 시작 (낙하 및 충돌 실험)
+                    </button>
+                    <div class="stage-canvas-wrap">
+                        <canvas id="dropCanvas" height="230"></canvas>
+                    </div>
+                </div>
+                <div class="sim-right-panel">
+                    <div class="graph-header">
+                        <span class="graph-title">📈 충돌 순간 가속도-시간 (a-t) 그래프</span>
+                        <span class="graph-sub">곡선 아래 넓이 = 총 충격량</span>
+                    </div>
+                    <div class="result-placeholder" id="result-placeholder">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🧪</div>
+                        <strong>아직 실험이 시작되지 않았어요!</strong><br>
+                        왼쪽에서 물체, 높이, 완충재를 선택한 후<br>
+                        <strong>[시뮬레이션 시작]</strong> 버튼을 누르면<br>
+                        낙하 결과와 가속도 그래프가 나타납니다.
+                    </div>
+                    <div class="result-active-area" id="result-active-area">
+                        <div class="stage-canvas-wrap">
+                            <canvas id="graphCanvas" height="175"></canvas>
+                        </div>
+                        <div class="metrics-row">
+                            <div class="metric-chip">
+                                <div class="metric-label">총 충격량 (I)</div>
+                                <div class="metric-val" id="val-impulse">-</div>
+                            </div>
+                            <div class="metric-chip">
+                                <div class="metric-label">최대 충격력 (F)</div>
+                                <div class="metric-val" id="val-force">-</div>
+                            </div>
+                            <div class="metric-chip">
+                                <div class="metric-label">최대 가속도 (a)</div>
+                                <div class="metric-val" id="val-accel">-</div>
+                            </div>
+                        </div>
+                        <div class="status-banner status-safe" id="status-banner">
+                            판정 결과가 여기에 표시됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 안전 기술과 성찰 -->
+        <section id="page5" class="page-section">
+            <div class="landscape-grid">
+                <div class="col-panel">
+                    <div>
+                        <span class="chapter-tag">CHAPTER 05 · 생활 속 확장과 탐구 성찰</span>
+                        <h1 class="page-title">현대 안전 기술과 탐구를 마치며</h1>
+                        <p class="lead-text">
+                            충돌 시간(Δt)을 늘려 최대 충격력(F)을 줄이는 역학 원리는 우리 생명을 지키는 다양한 안전장치에 핵심적으로 활용되고 있어요.
+                        </p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🛡️ 일상과 산업 속 안전 기술 사례</h3>
+                        <p>
+                            • <strong>자동차 크럼플 존(Crumple Zone):</strong> 충돌 시 차체 앞부분이 일부러 찌그러지면서 충돌 시간을 늘려 탑승자에게 전해지는 충격을 크게 줄여줘요.<br>
+                            • <strong>에어백 & 스마트폰 범퍼 케이스:</strong> 공기 쿠션이 부딪히는 시간을 지연시켜 머리와 기기 모서리에 가해지는 순간 힘을 분산시켜 줘요.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-panel">
+                    <div class="summary-callout" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                        <div class="summary-callout-title">🌱 탐구 활동 성찰 및 배운 점</div>
+                        <p style="margin-bottom: 12px;">
+                            처음 계획했던 실제 낙하 실험을 정해진 기한 내에 모두 마무리하지 못한 점은 아쉬움으로 남았어요. 하지만 이 경험을 통해 과학 탐구에서는 <strong>철저한 사전 일정 관리와 변인 통제</strong>가 얼마나 중요한지 깊이 깨달을 수 있었어요.
+                        </p>
+                        <p>
+                            또한, 정밀 센서 장비로 측정하기 어려운 짧은 충돌 순간을 <strong>가상의 가속도-시간 그래프와 시뮬레이션</strong>으로 시각화해 보면서, 교과서 속 물리 공식이 실제 생활 속 안전 설계와 어떻게 연결되는지 입체적으로 이해할 수 있었던 뜻깊은 시간이었어요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 하단 페이지 이동 바 -->
+    <footer class="bottom-footer">
+        <a href="#page0" class="footer-btn disabled" id="prev-btn" onclick="prevPage(); return false;">◀ 이전 페이지</a>
+        <span class="page-status-text" id="page-status">표지 (1 / 6 페이지)</span>
+        <a href="#page1" class="footer-btn" id="next-btn" onclick="nextPage(); return false;">다음 페이지 ▶</a>
+    </footer>
+</div>
+
+<script>
+    let currentPage = 0;
+    const totalPages = 6;
+    const pageNames = [
+        "표지",
+        "1장. 운동량의 탄생",
+        "2장. 운동량과 충격량",
+        "3장. 아치 구조의 비밀",
+        "4장. 충격량 시뮬레이터",
+        "5장. 안전 기술과 성찰"
+    ];
+
+    function goPage(idx) {
+        if (idx < 0 || idx >= totalPages) return;
+        currentPage = idx;
+
+        document.querySelectorAll('.page-section').forEach((sec, i) => {
+            sec.classList.toggle('active', i === currentPage);
+        });
+        document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === currentPage);
+        });
+
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        if (currentPage === 0) {
+            prevBtn.classList.add('disabled');
+            prevBtn.href = "#page0";
+        } else {
+            prevBtn.classList.remove('disabled');
+            prevBtn.href = "#page" + (currentPage - 1);
+        }
+
+        if (currentPage === totalPages - 1) {
+            nextBtn.classList.add('disabled');
+            nextBtn.href = "#page" + (totalPages - 1);
+        } else {
+            nextBtn.classList.remove('disabled');
+            nextBtn.href = "#page" + (currentPage + 1);
+        }
+
+        document.getElementById('page-status').textContent = `${pageNames[currentPage]} (${currentPage + 1} / ${totalPages} 페이지)`;
+
+        if (history.replaceState) {
+            history.replaceState(null, "", "#page" + currentPage);
+        }
+
+        if (currentPage === 4) {
+            setTimeout(drawInitialStage, 30);
+        }
+    }
+
+    function prevPage() { goPage(currentPage - 1); }
+    function nextPage() { goPage(currentPage + 1); }
+
+    window.addEventListener('hashchange', () => {
+        const match = window.location.hash.match(/^#page([0-5])$/);
+        if (match) goPage(parseInt(match[1], 10));
+    });
+
+    // 시뮬레이터 물리 및 커스텀 일러스트 로직
+    const objectSpecs = {
+        egg: { name: "날달걀", mass: 0.06, warnAccel: 140, breakAccel: 260 },
+        phone: { name: "스마트폰", mass: 0.20, warnAccel: 350, breakAccel: 650 },
+        glass: { name: "유리컵", mass: 0.35, warnAccel: 220, breakAccel: 420 },
+        watermelon: { name: "수박", mass: 3.00, warnAccel: 160, breakAccel: 300 }
+    };
+    const bufferSpecs = {
+        bubble: { name: "에어캡", dt: 0.055, color: "#bae6fd", border: "#38bdf8", thickness: 28 },
+        sponge: { name: "스펀지", dt: 0.025, color: "#fef08a", border: "#eab308", thickness: 24 },
+        concrete: { name: "맨땅", dt: 0.004, color: "#cbd5e1", border: "#64748b", thickness: 14 }
+    };
+    let animFrameId = null;
+
+    function resetSimView() {
+        if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+        document.getElementById('result-placeholder').style.display = 'flex';
+        document.getElementById('result-active-area').style.display = 'none';
+        drawInitialStage();
+    }
+
+    function drawInitialStage() {
+        const canvas = document.getElementById('dropCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth || 460;
+        canvas.height = 230;
+        const objKey = document.getElementById('sim-object').value;
+        const heightVal = parseFloat(document.getElementById('sim-height').value);
+        const buf = bufferSpecs[document.getElementById('sim-buffer').value];
+        const startY = 140 - ((heightVal - 0.5) / 3.5) * 95;
+        drawStageFrame(ctx, canvas.width, canvas.height, objKey, buf, startY, 0, "ready");
+    }
+
+    function drawObjectIllustration(ctx, cx, cy, objKey, state) {
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        if (objKey === "egg") {
+            if (state === "danger") {
+                // 깨진 날달걀: 노른자와 흰자 웅덩이 + 갈라진 껍질 조각 두 개
+                ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
+                ctx.strokeStyle = "#cbd5e1";
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.ellipse(0, 14, 34, 9, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "#f59e0b";
+                ctx.beginPath();
+                ctx.ellipse(2, 12, 12, 6, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#fef3c7";
+                ctx.beginPath();
+                ctx.ellipse(-2, 10, 4, 2, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(-18, 2);
+                ctx.rotate(-0.45);
+                ctx.fillStyle = "#fef3c7";
+                ctx.strokeStyle = "#d97706";
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.arc(0, 0, 14, Math.PI * 0.5, Math.PI * 1.5);
+                ctx.lineTo(4, -9); ctx.lineTo(-2, -3); ctx.lineTo(5, 3); ctx.lineTo(-1, 9);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(18, 2);
+                ctx.rotate(0.45);
+                ctx.fillStyle = "#fef3c7";
+                ctx.strokeStyle = "#d97706";
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.arc(0, 0, 14, -Math.PI * 0.5, Math.PI * 0.5);
+                ctx.lineTo(-4, 9); ctx.lineTo(2, 3); ctx.lineTo(-5, -3); ctx.lineTo(1, -9);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+            } else {
+                ctx.fillStyle = "#fef3c7";
+                ctx.strokeStyle = "#d97706";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, -22);
+                ctx.bezierCurveTo(16, -22, 19, -2, 17, 10);
+                ctx.bezierCurveTo(15, 20, 7, 22, 0, 22);
+                ctx.bezierCurveTo(-7, 22, -15, 20, -17, 10);
+                ctx.bezierCurveTo(-19, -2, -16, -22, 0, -22);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "rgba(255,255,255,0.7)";
+                ctx.beginPath();
+                ctx.ellipse(-6, -7, 3.5, 8, -0.25, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (state === "warn") {
+                    ctx.strokeStyle = "#92400e";
+                    ctx.lineWidth = 2.2;
+                    ctx.beginPath();
+                    ctx.moveTo(-4, -12); ctx.lineTo(3, -4); ctx.lineTo(-3, 2); ctx.lineTo(5, 9); ctx.lineTo(0, 14);
+                    ctx.stroke();
+                }
+            }
+        } else if (objKey === "phone") {
+            if (state === "danger") {
+                ctx.rotate(0.12);
+                ctx.fillStyle = "#1e293b";
+                ctx.strokeStyle = "#0f172a";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(-15, -24, 30, 48, 5);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "#334155";
+                ctx.fillRect(-12, -19, 24, 38);
+
+                ctx.strokeStyle = "#e2e8f0";
+                ctx.lineWidth = 1.4;
+                const impactX = 3, impactY = -2;
+                const rays = [[-11, -18], [11, -17], [12, 16], [-11, 17], [-12, -2], [12, 3], [0, -19], [-3, 19]];
+                rays.forEach(([rx, ry]) => {
+                    ctx.beginPath();
+                    ctx.moveTo(impactX, impactY);
+                    ctx.lineTo(rx, ry);
+                    ctx.stroke();
+                });
+                ctx.beginPath(); ctx.arc(impactX, impactY, 6, 0, Math.PI * 2); ctx.stroke();
+                ctx.beginPath(); ctx.arc(impactX, impactY, 11, 0.2, Math.PI * 1.7); ctx.stroke();
+
+                ctx.fillStyle = "#bae6fd";
+                ctx.beginPath(); ctx.moveTo(20, -10); ctx.lineTo(26, -14); ctx.lineTo(24, -6); ctx.closePath(); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(-21, 8); ctx.lineTo(-27, 5); ctx.lineTo(-24, 13); ctx.closePath(); ctx.fill();
+            } else {
+                ctx.fillStyle = "#1e293b";
+                ctx.beginPath();
+                ctx.roundRect(-14, -24, 28, 48, 5);
+                ctx.fill();
+
+                ctx.fillStyle = state === "warn" ? "#94a3b8" : "#38bdf8";
+                ctx.beginPath();
+                ctx.roundRect(-11.5, -19.5, 23, 39, 3);
+                ctx.fill();
+
+                ctx.fillStyle = "#0f172a";
+                ctx.beginPath();
+                ctx.roundRect(-4, -22, 8, 2, 1);
+                ctx.fill();
+
+                if (state === "warn") {
+                    ctx.strokeStyle = "#ffffff";
+                    ctx.lineWidth = 1.6;
+                    ctx.beginPath();
+                    ctx.moveTo(-10, -14); ctx.lineTo(-2, -6); ctx.lineTo(-6, 1);
+                    ctx.moveTo(-2, -6); ctx.lineTo(6, -10);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = "rgba(255,255,255,0.35)";
+                    ctx.beginPath();
+                    ctx.moveTo(-9, -17); ctx.lineTo(3, -17); ctx.lineTo(-9, 2); ctx.closePath();
+                    ctx.fill();
+                }
+            }
+        } else if (objKey === "glass") {
+            if (state === "danger") {
+                ctx.fillStyle = "rgba(125, 211, 252, 0.55)";
+                ctx.beginPath();
+                ctx.ellipse(0, 16, 36, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                const shards = [
+                    [[-18, 12], [-8, -4], [-4, 13]],
+                    [[4, 13], [10, -6], [18, 11]],
+                    [[-6, 14], [0, 3], [6, 14]],
+                    [[-25, 8], [-19, 0], [-16, 10]],
+                    [[19, 9], [25, 1], [27, 11]]
+                ];
+                shards.forEach(pts => {
+                    ctx.fillStyle = "rgba(224, 242, 254, 0.9)";
+                    ctx.strokeStyle = "#0284c7";
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.moveTo(pts[0][0], pts[0][1]);
+                    ctx.lineTo(pts[1][0], pts[1][1]);
+                    ctx.lineTo(pts[2][0], pts[2][1]);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                });
+            } else {
+                ctx.fillStyle = "rgba(224, 242, 254, 0.75)";
+                ctx.strokeStyle = "#0284c7";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-15, -20); ctx.lineTo(15, -20); ctx.lineTo(12, 20); ctx.lineTo(-12, 20);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = "rgba(56, 189, 248, 0.45)";
+                ctx.beginPath();
+                ctx.moveTo(-13.5, -5); ctx.lineTo(13.5, -5); ctx.lineTo(11.5, 19); ctx.lineTo(-11.5, 19);
+                ctx.closePath();
+                ctx.fill();
+
+                if (state === "warn") {
+                    ctx.strokeStyle = "#0369a1";
+                    ctx.lineWidth = 1.8;
+                    ctx.beginPath();
+                    ctx.moveTo(4, -18); ctx.lineTo(-1, -7); ctx.lineTo(5, 2); ctx.lineTo(0, 10);
+                    ctx.stroke();
+                }
+            }
+        } else if (objKey === "watermelon") {
+            if (state === "danger") {
+                ctx.save();
+                ctx.translate(-14, 4);
+                ctx.rotate(-0.35);
+                ctx.fillStyle = "#16a34a";
+                ctx.beginPath(); ctx.arc(0, 0, 20, Math.PI * 0.1, Math.PI * 1.1); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = "#ef4444";
+                ctx.beginPath(); ctx.arc(0, 0, 16, Math.PI * 0.1, Math.PI * 1.1); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = "#1e293b";
+                ctx.beginPath(); ctx.arc(-5, 6, 1.5, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(3, 8, 1.5, 0, Math.PI*2); ctx.fill();
+                ctx.restore();
+
+                ctx.save();
+                ctx.translate(14, 4);
+                ctx.rotate(0.35);
+                ctx.fillStyle = "#16a34a";
+                ctx.beginPath(); ctx.arc(0, 0, 20, -Math.PI * 0.1, Math.PI * 0.9); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = "#ef4444";
+                ctx.beginPath(); ctx.arc(0, 0, 16, -Math.PI * 0.1, Math.PI * 0.9); ctx.closePath(); ctx.fill();
+                ctx.fillStyle = "#1e293b";
+                ctx.beginPath(); ctx.arc(-3, 7, 1.5, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(5, 5, 1.5, 0, Math.PI*2); ctx.fill();
+                ctx.restore();
+            } else {
+                ctx.fillStyle = "#22c55e";
+                ctx.strokeStyle = "#15803d";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, 0, 21, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.strokeStyle = "#14532d";
+                ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, 20); ctx.stroke();
+                ctx.beginPath(); ctx.bezierCurveTo(-11, -16, -11, 16, 0, 20); ctx.stroke();
+                ctx.beginPath(); ctx.bezierCurveTo(11, -16, 11, 16, 0, 20); ctx.stroke();
+
+                if (state === "warn") {
+                    ctx.strokeStyle = "#dc2626";
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(-6, -10); ctx.lineTo(2, -1); ctx.lineTo(-3, 8);
+                    ctx.stroke();
+                }
+            }
+        }
+        ctx.restore();
+    }
+
+    function drawStageFrame(ctx, w, h, objKey, buf, objY, squish, state) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = "#f1f5f9"; ctx.lineWidth = 1;
+        for (let y = 30; y < h - 30; y += 35) {
+            ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(w - 20, y); ctx.stroke();
+        }
+
+        const floorY = h - 18;
+        const bufH = Math.max(8, buf.thickness - squish);
+        const bufTop = floorY - bufH;
+
+        ctx.fillStyle = buf.color; ctx.strokeStyle = buf.border; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.roundRect(w * 0.25, bufTop, w * 0.5, bufH, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = "#64748b"; ctx.fillRect(20, floorY, w - 40, 6);
+        ctx.fillStyle = "#475569"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+        ctx.fillText(buf.name, w / 2, floorY - bufH / 2 + 4);
+
+        drawObjectIllustration(ctx, w / 2, objY, objKey, state);
+
+        if (state === "safe") {
+            ctx.fillStyle = "#16a34a"; ctx.font = "bold 13px sans-serif";
+            ctx.fillText("✨ 멀쩡해요! (안전)", w / 2, objY - 34);
+        } else if (state === "warn") {
+            ctx.fillStyle = "#b45309"; ctx.font = "bold 13px sans-serif";
+            ctx.fillText("⚡ 금이 갔어요! (주의)", w / 2, objY - 34);
+        } else if (state === "danger") {
+            ctx.fillStyle = "#dc2626"; ctx.font = "bold 13px sans-serif";
+            ctx.fillText("💥 산산조각 파손!", w / 2, objY - 32);
+        }
+    }
+
+    function startSimulation() {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        const btn = document.getElementById('start-btn');
+        btn.disabled = true; btn.textContent = "⏳ 낙하 실험 진행 중...";
+        const objKey = document.getElementById('sim-object').value;
+        const obj = objectSpecs[objKey];
+        const heightVal = parseFloat(document.getElementById('sim-height').value);
+        const bufKey = document.getElementById('sim-buffer').value;
+        const buf = bufferSpecs[bufKey];
+
+        const vImpact = Math.sqrt(2 * 9.8 * heightVal);
+        const impulse = obj.mass * vImpact;
+        const peakForce = (impulse / buf.dt) * (Math.PI / 2);
+        const peakAccel = peakForce / obj.mass;
+
+        let outcome = "safe";
+        if (peakAccel >= obj.breakAccel) outcome = "danger";
+        else if (peakAccel >= obj.warnAccel) outcome = "warn";
+
+        const canvas = document.getElementById('dropCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth || 460; canvas.height = 230;
+        const startY = 140 - ((heightVal - 0.5) / 3.5) * 95;
+        const impactY = (canvas.height - 18) - buf.thickness - 20;
+        const startTime = performance.now();
+
+        function animate(now) {
+            const t = Math.min(1, (now - startTime) / 520);
+            if (t < 0.75) {
+                const p = t / 0.75;
+                drawStageFrame(ctx, canvas.width, canvas.height, objKey, buf, startY + (impactY - startY) * p * p, 0, "falling");
+            } else {
+                const p = (t - 0.75) / 0.25;
+                const maxSquish = bufKey === "concrete" ? 2 : (bufKey === "sponge" ? 10 : 14);
+                const squish = Math.sin(p * Math.PI) * maxSquish;
+                drawStageFrame(ctx, canvas.width, canvas.height, objKey, buf, impactY + squish * 0.7, squish, t >= 1 ? outcome : "falling");
+            }
+            if (t < 1) { animFrameId = requestAnimationFrame(animate); }
+            else {
+                animFrameId = null; btn.disabled = false; btn.textContent = "▶ 시뮬레이션 다시 시작";
+                showSimulationResults(obj, buf, impulse, peakForce, peakAccel, outcome);
+            }
+        }
+        animFrameId = requestAnimationFrame(animate);
+    }
+
+    function showSimulationResults(obj, buf, impulse, peakForce, peakAccel, outcome) {
+        document.getElementById('result-placeholder').style.display = 'none';
+        document.getElementById('result-active-area').style.display = 'flex';
+        document.getElementById('val-impulse').textContent = `${impulse.toFixed(2)} N·s`;
+        document.getElementById('val-force').textContent = `${peakForce.toFixed(1)} N`;
+        document.getElementById('val-accel').textContent = `${peakAccel.toFixed(0)} m/s²`;
+
+        const banner = document.getElementById('status-banner');
+        banner.className = "status-banner";
+        if (outcome === "safe") {
+            banner.classList.add("status-safe");
+            banner.innerHTML = `<strong>🟢 안전 (파손되지 않음):</strong> ${buf.name}이(가) 충돌 시간(${buf.dt}s)을 충분히 늘려주어 최대 가속도가 ${obj.name}의 한계치(${obj.warnAccel} m/s²) 아래로 유지되었어요!`;
+        } else if (outcome === "warn") {
+            banner.classList.add("status-warn");
+            banner.innerHTML = `<strong>🟡 주의 (균열 및 손상 위험):</strong> 충격이 한계치에 가까워져 ${obj.name} 표면에 금이 가거나 내부 부품이 손상될 수 있어요. 더 두꺼운 완충재가 필요해요!`;
+        } else {
+            banner.classList.add("status-danger");
+            banner.innerHTML = `<strong>🔴 파손 (충격 한계 초과):</strong> 짧은 시간 동안 너무 큰 가속도(${peakAccel.toFixed(0)} m/s²)가 작용해 ${obj.name}이(가) 견디지 못하고 파손되었어요!`;
+        }
+        drawAccelGraph(buf.dt, peakAccel, outcome);
+    }
+
+    function drawAccelGraph(dt, peakAccel, outcome) {
+        const canvas = document.getElementById('graphCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth || 440; canvas.height = 175;
+        const w = canvas.width, h = canvas.height, padLeft = 46, padRight = 24, padTop = 22, padBottom = 30;
+        ctx.clearRect(0, 0, w, h);
+
+        const maxTimeScale = 0.07, maxAccelScale = Math.max(750, peakAccel * 1.15);
+        const plotW = w - padLeft - padRight, plotH = h - padTop - padBottom;
+
+        ctx.strokeStyle = "#f1f5f9"; ctx.lineWidth = 1;
+        for (let i = 1; i <= 3; i++) {
+            const gy = padTop + (plotH * i) / 4;
+            ctx.beginPath(); ctx.moveTo(padLeft, gy); ctx.lineTo(w - padRight, gy); ctx.stroke();
+        }
+        ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(padLeft, padTop); ctx.lineTo(padLeft, h - padBottom); ctx.lineTo(w - padRight, h - padBottom); ctx.stroke();
+
+        ctx.fillStyle = "#64748b"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "right";
+        ctx.fillText("a (m/s²)", padLeft - 6, padTop + 4);
+        ctx.textAlign = "center";
+        ctx.fillText(`충돌 시간 Δt = ${dt}s`, padLeft + plotW / 2, h - 8);
+
+        let strokeColor = "#2563eb", fillColor = "rgba(37, 99, 235, 0.16)";
+        if (outcome === "warn") { strokeColor = "#d97706"; fillColor = "rgba(217, 119, 6, 0.18)"; }
+        else if (outcome === "danger") { strokeColor = "#dc2626"; fillColor = "rgba(220, 38, 38, 0.18)"; }
+
+        const curvePixelW = Math.min(plotW, (dt / maxTimeScale) * plotW);
+        const steps = 80;
+        ctx.beginPath(); ctx.moveTo(padLeft, h - padBottom);
+        for (let i = 0; i <= steps; i++) {
+            const ratio = i / steps;
+            ctx.lineTo(padLeft + ratio * curvePixelW, (h - padBottom) - (Math.sin(ratio * Math.PI) * peakAccel / maxAccelScale) * plotH);
+        }
+        ctx.lineTo(padLeft + curvePixelW, h - padBottom); ctx.closePath();
+        ctx.fillStyle = fillColor; ctx.fill();
+
+        ctx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+            const ratio = i / steps;
+            const px = padLeft + ratio * curvePixelW;
+            const py = (h - padBottom) - (Math.sin(ratio * Math.PI) * peakAccel / maxAccelScale) * plotH;
+            if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.strokeStyle = strokeColor; ctx.lineWidth = 3; ctx.stroke();
+    }
+
+    window.addEventListener('load', () => {
+        const match = window.location.hash.match(/^#page([0-5])$/);
+        if (match) goPage(parseInt(match[1], 10));
+        drawInitialStage();
+    });
+    window.addEventListener('resize', () => {
+        if (currentPage === 4 && document.getElementById('result-active-area').style.display === 'none') {
+            drawInitialStage();
+        }
+    });
+</script>
+</body>
+</html>
